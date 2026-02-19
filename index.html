@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام جرد محل الذهب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #d4af37;
+            --secondary-color: #8b7355;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* الشريط العلوي */
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: var(--light-color);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .stat-item span:first-child {
+            color: var(--secondary-color);
+            margin-left: 10px;
+        }
+
+        .stat-item span:last-child {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* قسم الماسح الضوئي */
+        .scanner-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .scanner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .scanner-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #scanner-video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid var(--primary-color);
+            box-sizing: border-box;
+        }
+
+        .scanner-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+
+        .manual-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .manual-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* النماذج */
+        .add-item-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .item-form {
+            margin-top: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group input[readonly] {
+            background: var(--light-color);
+            cursor: not-allowed;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        /* الأزرار */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-excel {
+            background: #1d6f42;
+            color: white;
+        }
+
+        .btn-pdf {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* أقسام الجرد */
+        .inventory-sections {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .section-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #666;
+            position: relative;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 35px 8px 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* الجداول */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        tfoot td {
+            background: var(--light-color);
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        /* أزرار الإجراءات */
+        .action-btn {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            font-size: 12px;
+        }
+
+        .edit-btn {
+            background: var(--warning-color);
+        }
+
+        .delete-btn {
+            background: var(--danger-color);
+        }
+
+        /* قسم التصدير */
+        .export-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* رسائل التنبيه */
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert-success {
+            background: var(--success-color);
+        }
+
+        .alert-error {
+            background: var(--danger-color);
+        }
+
+        .alert-warning {
+            background: var(--warning-color);
+            color: var(--dark-color);
+        }
+
+        @keyframes slideDown {
+            from {
+                top: -100px;
+                opacity: 0;
+            }
+            to {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+
+        /* التجاوب مع الشاشات */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stats {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+            }
+            
+            .form-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+            
+            .export-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .table-header {
+                flex-direction: column;
+            }
+            
+            .section-tabs {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط العلوي -->
+        <header class="header">
+            <h1><i class="fas fa-gem"></i> نظام جرد الذهب والمصنعية</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <span>إجمالي القطع:</span>
+                    <span id="totalItems">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>إجمالي الوزن:</span>
+                    <span id="totalWeight">0 جرام</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- الماسح الضوئي للباركود -->
+        <section class="scanner-section">
+            <div class="scanner-header">
+                <h2><i class="fas fa-camera"></i> ماسح الباركود</h2>
+                <button id="startScanner" class="btn btn-primary">
+                    <i class="fas fa-play"></i> تشغيل الماسح
+                </button>
+            </div>
+            <div id="scanner-container" class="scanner-container" style="display: none;">
+                <video id="scanner-video"></video>
+                <div class="scanner-overlay">
+                    <div class="scanner-line"></div>
+                </div>
+            </div>
+            <div class="manual-input">
+                <input type="text" id="barcodeInput" placeholder="أدخل الباركود يدوياً">
+                <button id="addBarcodeBtn" class="btn btn-success">
+                    <i class="fas fa-plus"></i> إضافة
+                </button>
+            </div>
+        </section>
+
+        <!-- نموذج إضافة قطعة جديدة -->
+        <section class="add-item-section">
+            <h2><i class="fas fa-plus-circle"></i> إضافة قطعة جديدة</h2>
+            <form id="itemForm" class="item-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="barcode">الباركود</label>
+                        <input type="text" id="barcode" required readonly placeholder="يتم التعبئة تلقائياً">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemName">اسم القطعة</label>
+                        <input type="text" id="itemName" required placeholder="أدخل اسم القطعة">
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">الوزن (جرام)</label>
+                        <input type="number" id="weight" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="goldType">نوع العيار</label>
+                        <select id="goldType" required>
+                            <option value="24">عيار 24</option>
+                            <option value="21" selected>عيار 21</option>
+                            <option value="18">عيار 18</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="manufacturingPrice">سعر المصنعية</label>
+                        <input type="number" id="manufacturingPrice" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="goldPrice">سعر الذهب (للجرام)</label>
+                        <input type="number" id="goldPrice" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalSellingPrice">سعر البيع الإجمالي</label>
+                        <input type="number" id="totalSellingPrice" step="0.01" readonly placeholder="0.00">
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> حفظ القطعة
+                    </button>
+                    <button type="button" class="btn btn-info" id="calculatePrice">
+                        <i class="fas fa-calculator"></i> حساب السعر
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- أقسام الجرد -->
+        <section class="inventory-sections">
+            <div class="section-tabs">
+                <button class="tab-btn active" data-tab="all">كل القطع</button>
+                <button class="tab-btn" data-tab="manufacturing">المصنعية فقط</button>
+                <button class="tab-btn" data-tab="gold">الذهب فقط</button>
+            </div>
+
+            <!-- جدول جميع القطع -->
+            <div id="all-items" class="tab-content active">
+                <div class="table-header">
+                    <h3><i class="fas fa-list"></i> جميع القطع</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchAll" placeholder="بحث في جميع القطع...">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="allItemsTable">
+                        <thead>
+                            <tr>
+                                <th>الباركود</th>
+                                <th>القطعة</th>
+                                <th>الوزن</th>
+                                <th>العيار</th>
+                                <th>المصنعية</th>
+                                <th>سعر الذهب</th>
+                                <th>الإجمالي</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allItemsBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-left">الإجمالي الكلي:</td>
+                                <td id="totalAllValue">0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- جدول المصنعية فقط -->
+            <div id="manufacturing-items" class="tab-content">
+                <div class="table-header">
+                    <h3><i class="fas fa-cog"></i> المصنعية فقط</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchManufacturing" placeholder="بحث في المصنعية...">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="manufacturingTable">
+                        <thead>
+                            <tr>
+                                <th>الباركود</th>
+                                <th>القطعة</th>
+                                <th>الوزن</th>
+                                <th>المصنعية</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="manufacturingBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-left">إجمالي المصنعية:</td>
+                                <td id="totalManufacturingValue">0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- جدول الذهب فقط -->
+            <div id="gold-items" class="tab-content">
+                <div class="table-header">
+                    <h3><i class="fas fa-coins"></i> الذهب فقط</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchGold" placeholder="بحث في الذهب...">
+                    </div>
+ 
