@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام جرد الذهب المتطور - شركات وأصناف</title>
+    <title>نظام جرد الذهب المتطور - Gold Inventory System</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -22,6 +22,7 @@
             --info-color: #17a2b8;
             --dark-color: #343a40;
             --light-color: #f8f9fa;
+            --developer-color: #6f42c1;
         }
 
         body {
@@ -78,6 +79,52 @@
 
         .network-status.offline {
             background: var(--danger-color);
+        }
+
+        /* توقيع المطور */
+        .developer-signature {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--developer-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: slideInLeft 0.3s ease;
+            direction: ltr;
+        }
+
+        .developer-signature a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+
+        .developer-signature a:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        @keyframes slideInLeft {
+            from {
+                left: -100px;
+                opacity: 0;
+            }
+            to {
+                left: 20px;
+                opacity: 1;
+            }
         }
 
         /* الشريط العلوي */
@@ -213,16 +260,6 @@
             font-size: 14px;
         }
 
-        .management-item-actions button {
-            padding: 5px 10px;
-            margin: 0 2px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            color: white;
-            font-size: 12px;
-        }
-
         /* قسم السعر الرئيسي */
         .price-section {
             background: white;
@@ -335,6 +372,22 @@
             font-family: 'Tajawal', sans-serif;
         }
 
+        .barcode-auto-generate {
+            background: var(--info-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .barcode-auto-generate i {
+            font-size: 16px;
+        }
+
         /* النماذج */
         .add-item-section {
             background: white;
@@ -387,11 +440,6 @@
         .form-group textarea:focus {
             outline: none;
             border-color: var(--primary-color);
-        }
-
-        .form-group input[readonly] {
-            background: var(--light-color);
-            cursor: not-allowed;
         }
 
         .checkbox-group {
@@ -486,9 +534,9 @@
             color: white;
         }
 
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 14px;
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
         }
 
         /* أقسام الجرد */
@@ -816,6 +864,14 @@
                 padding: 5px 10px;
             }
 
+            .developer-signature {
+                bottom: 10px;
+                left: 10px;
+                font-size: 12px;
+                padding: 8px 15px;
+                flex-wrap: wrap;
+            }
+
             .filters {
                 flex-direction: column;
             }
@@ -837,6 +893,16 @@
     <div id="autosaveIndicator" class="autosave-indicator">
         <i class="fas fa-check-circle"></i>
         <span>تم الحفظ تلقائياً</span>
+    </div>
+
+    <!-- توقيع المطور -->
+    <div class="developer-signature">
+        <i class="fas fa-code"></i>
+        <span>تطوير: محمد أحمد فؤاد</span>
+        <a href="https://wa.me/201010421571" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+            +201010421571
+        </a>
     </div>
 
     <div class="container">
@@ -970,6 +1036,10 @@
                     <i class="fas fa-plus"></i> إضافة
                 </button>
             </div>
+            <div class="barcode-auto-generate">
+                <i class="fas fa-info-circle"></i>
+                <span>إذا لم تقم بإدخال باركود، سيتم إنشاء باركود تلقائي عند الحفظ</span>
+            </div>
             <div id="barcodeDuplicateWarning" class="barcode-duplicate-warning">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>هذا الباركود موجود مسبقاً! سيتم تحديث البيانات بدلاً من إضافة قطعة جديدة.</span>
@@ -983,7 +1053,7 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="barcode">الباركود</label>
-                        <input type="text" id="barcode" required readonly placeholder="يتم التعبئة تلقائياً">
+                        <input type="text" id="barcode" placeholder="سيتم إنشاؤه تلقائياً">
                     </div>
                     <div class="form-group">
                         <label for="itemName">اسم القطعة</label>
@@ -1197,7 +1267,10 @@
             <h2><i class="fas fa-download"></i> تصدير ونسخ احتياطي</h2>
             <div class="export-buttons">
                 <button id="exportExcel" class="btn btn-excel">
-                    <i class="fas fa-file-excel"></i> تصدير Excel
+                    <i class="fas fa-file-excel"></i> تصدير Excel شامل
+                </button>
+                <button id="exportExcelSummary" class="btn btn-excel">
+                    <i class="fas fa-chart-pie"></i> تصدير ملخص Excel
                 </button>
                 <button id="exportPDF" class="btn btn-pdf">
                     <i class="fas fa-file-pdf"></i> تصدير PDF
@@ -1289,6 +1362,13 @@
                 this.setupEventListeners();
             }
 
+            generateBarcode() {
+                const prefix = 'GOLD';
+                const timestamp = Date.now().toString().slice(-8);
+                const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                return `${prefix}${timestamp}${random}`;
+            }
+
             setupNetworkMonitoring() {
                 window.addEventListener('online', () => {
                     document.getElementById('networkStatus').className = 'network-status online';
@@ -1363,7 +1443,8 @@
                 document.getElementById('wholesalePrice').addEventListener('change', () => this.calculateTotalPrice());
 
                 // أزرار التصدير
-                document.getElementById('exportExcel').addEventListener('click', () => this.exportToExcel());
+                document.getElementById('exportExcel').addEventListener('click', () => this.exportToExcel('full'));
+                document.getElementById('exportExcelSummary').addEventListener('click', () => this.exportToExcel('summary'));
                 document.getElementById('exportPDF').addEventListener('click', () => this.exportToPDF());
                 document.getElementById('printReport').addEventListener('click', () => this.printReport());
                 document.getElementById('backupData').addEventListener('click', () => this.createBackup());
@@ -1463,7 +1544,7 @@
                             <p>${company.phone || 'لا يوجد هاتف'}</p>
                             <small>${company.address || ''}</small>
                         </div>
-                        <div class="management-item-actions">
+                        <div>
                             <button class="btn-small btn-danger" onclick="inventory.deleteCompany(${company.id})">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -1485,7 +1566,7 @@
                             <h4>${category.name}</h4>
                             <p>${category.description || ''}</p>
                         </div>
-                        <div class="management-item-actions">
+                        <div>
                             <button class="btn-small btn-danger" onclick="inventory.deleteCategory(${category.id})">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -1758,10 +1839,10 @@
             addItem(event) {
                 event.preventDefault();
 
-                const barcode = document.getElementById('barcode').value;
+                let barcode = document.getElementById('barcode').value.trim();
                 if (!barcode) {
-                    this.showAlert('الرجاء إدخال الباركود أولاً', 'error');
-                    return;
+                    barcode = this.generateBarcode();
+                    document.getElementById('barcode').value = barcode;
                 }
 
                 const weight = parseFloat(document.getElementById('weight').value) || 0;
@@ -2132,7 +2213,9 @@
                     companies: this.companies,
                     categories: this.categories,
                     mainPrice: this.mainGoldPrice21,
-                    date: new Date().toISOString()
+                    date: new Date().toISOString(),
+                    developer: 'محمد أحمد فؤاد',
+                    phone: '+201010421571'
                 };
                 
                 const backupStr = JSON.stringify(backup, null, 2);
@@ -2221,6 +2304,40 @@
 
                 const filteredItems = this.getFilteredItems();
                 
+                // حساب المجاميع حسب الشركات والأصناف
+                const companiesSummary = {};
+                const categoriesSummary = {};
+
+                filteredItems.forEach(item => {
+                    // ملخص الشركات
+                    if (!companiesSummary[item.companyName]) {
+                        companiesSummary[item.companyName] = {
+                            count: 0,
+                            weight: 0,
+                            manufacturing: 0,
+                            total: 0
+                        };
+                    }
+                    companiesSummary[item.companyName].count++;
+                    companiesSummary[item.companyName].weight += item.weight;
+                    companiesSummary[item.companyName].manufacturing += item.manufacturingPrice;
+                    companiesSummary[item.companyName].total += item.totalPrice;
+
+                    // ملخص الأصناف
+                    if (!categoriesSummary[item.categoryName]) {
+                        categoriesSummary[item.categoryName] = {
+                            count: 0,
+                            weight: 0,
+                            manufacturing: 0,
+                            total: 0
+                        };
+                    }
+                    categoriesSummary[item.categoryName].count++;
+                    categoriesSummary[item.categoryName].weight += item.weight;
+                    categoriesSummary[item.categoryName].manufacturing += item.manufacturingPrice;
+                    categoriesSummary[item.categoryName].total += item.totalPrice;
+                });
+
                 const printWindow = window.open('', '_blank');
                 printWindow.document.write(`
                     <html dir="rtl">
@@ -2228,65 +2345,147 @@
                         <title>تقرير جرد الذهب</title>
                         <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
                         <style>
-                            body { font-family: 'Tajawal', sans-serif; padding: 20px; }
-                            h1 { color: #d4af37; text-align: center; margin-bottom: 20px; }
-                            .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-                            .summary-card { background: #f5f5f5; padding: 15px; border-radius: 8px; text-align: center; }
-                            .summary-card .label { color: #666; font-size: 14px; }
-                            .summary-card .value { color: #d4af37; font-size: 20px; font-weight: 700; }
-                            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                            body { font-family: 'Tajawal', sans-serif; padding: 20px; background: #f5f5f5; }
+                            .report-container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+                            h1 { color: #d4af37; text-align: center; margin-bottom: 30px; font-size: 32px; }
+                            h2 { color: #8b7355; margin: 20px 0 15px; border-bottom: 2px solid #d4af37; padding-bottom: 10px; }
+                            .header-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+                            .info-card { background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; }
+                            .info-card .label { color: #666; font-size: 14px; }
+                            .info-card .value { color: #d4af37; font-size: 20px; font-weight: 700; }
+                            .summary-section { margin-bottom: 30px; }
+                            .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+                            .summary-card { background: #f8f9fa; padding: 20px; border-radius: 10px; }
+                            .summary-card h3 { color: #8b7355; margin-bottom: 15px; }
+                            .summary-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
+                            .summary-item:last-child { border-bottom: none; }
+                            .summary-total { font-weight: 700; color: #d4af37; }
+                            table { width: 100%; border-collapse: collapse; margin: 20px 0; }
                             th { background: #d4af37; color: white; padding: 12px; }
                             td { padding: 10px; border-bottom: 1px solid #ddd; text-align: center; }
                             .total-row { background: #e8f5e9; font-weight: 700; }
-                            .footer { margin-top: 30px; text-align: center; color: #666; font-size: 12px; }
+                            .footer { margin-top: 40px; text-align: center; color: #666; font-size: 12px; border-top: 1px solid #e0e0e0; padding-top: 20px; }
+                            .developer { color: #6f42c1; font-weight: 700; }
+                            .whatsapp { color: #25d366; }
                             @media print {
                                 .no-print { display: none; }
-                                body { padding: 0; }
+                                body { background: white; }
+                                .report-container { box-shadow: none; padding: 0; }
                             }
                         </style>
                     </head>
                     <body>
-                        <h1>تقرير جرد الذهب</h1>
-                        
-                        <div class="summary">
-                            <div class="summary-card">
-                                <div class="label">عدد القطع</div>
-                                <div class="value">${filteredItems.length}</div>
+                        <div class="report-container">
+                            <h1>تقرير جرد الذهب الشامل</h1>
+                            
+                            <div class="header-info">
+                                <div class="info-card">
+                                    <div class="label">تاريخ التقرير</div>
+                                    <div class="value">${new Date().toLocaleDateString('ar-EG')}</div>
+                                </div>
+                                <div class="info-card">
+                                    <div class="label">عدد القطع</div>
+                                    <div class="value">${filteredItems.length}</div>
+                                </div>
+                                <div class="info-card">
+                                    <div class="label">الوزن الإجمالي</div>
+                                    <div class="value">${filteredItems.reduce((sum, item) => sum + item.weight, 0).toFixed(2)} جرام</div>
+                                </div>
+                                <div class="info-card">
+                                    <div class="label">إجمالي المصنعية</div>
+                                    <div class="value">${filteredItems.reduce((sum, item) => sum + item.manufacturingPrice, 0).toFixed(2)}</div>
+                                </div>
+                                <div class="info-card">
+                                    <div class="label">الإجمالي الكلي</div>
+                                    <div class="value">${filteredItems.reduce((sum, item) => sum + item.totalPrice, 0).toFixed(2)}</div>
+                                </div>
                             </div>
-                            <div class="summary-card">
-                                <div class="label">الوزن الإجمالي</div>
-                                <div class="value">${filteredItems.reduce((sum, item) => sum + item.weight, 0).toFixed(2)} جرام</div>
+
+                            <div class="summary-section">
+                                <h2>ملخص حسب الشركات</h2>
+                                <div class="summary-grid">
+                `);
+
+                // إضافة ملخص الشركات
+                Object.entries(companiesSummary).forEach(([company, data]) => {
+                    printWindow.document.write(`
+                        <div class="summary-card">
+                            <h3>${company}</h3>
+                            <div class="summary-item">
+                                <span>عدد القطع:</span>
+                                <span class="summary-total">${data.count}</span>
                             </div>
-                            <div class="summary-card">
-                                <div class="label">إجمالي المصنعية</div>
-                                <div class="value">${filteredItems.reduce((sum, item) => sum + item.manufacturingPrice, 0).toFixed(2)}</div>
+                            <div class="summary-item">
+                                <span>الوزن الإجمالي:</span>
+                                <span class="summary-total">${data.weight.toFixed(2)} جرام</span>
                             </div>
-                            <div class="summary-card">
-                                <div class="label">إجمالي الذهب</div>
-                                <div class="value">${filteredItems.reduce((sum, item) => sum + (item.weight * item.goldPrice), 0).toFixed(2)}</div>
+                            <div class="summary-item">
+                                <span>إجمالي المصنعية:</span>
+                                <span class="summary-total">${data.manufacturing.toFixed(2)}</span>
                             </div>
-                            <div class="summary-card">
-                                <div class="label">الإجمالي الكلي</div>
-                                <div class="value">${filteredItems.reduce((sum, item) => sum + item.totalPrice, 0).toFixed(2)}</div>
+                            <div class="summary-item">
+                                <span>الإجمالي:</span>
+                                <span class="summary-total">${data.total.toFixed(2)}</span>
                             </div>
                         </div>
-                        
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>الباركود</th>
-                                    <th>القطعة</th>
-                                    <th>الشركة</th>
-                                    <th>الصنف</th>
-                                    <th>الوزن</th>
-                                    <th>العيار</th>
-                                    <th>المصنعية</th>
-                                    <th>سعر الذهب</th>
-                                    <th>النوع</th>
-                                    <th>الإجمالي</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    `);
+                });
+
+                printWindow.document.write(`
+                                </div>
+                            </div>
+
+                            <div class="summary-section">
+                                <h2>ملخص حسب الأصناف</h2>
+                                <div class="summary-grid">
+                `);
+
+                // إضافة ملخص الأصناف
+                Object.entries(categoriesSummary).forEach(([category, data]) => {
+                    printWindow.document.write(`
+                        <div class="summary-card">
+                            <h3>${category}</h3>
+                            <div class="summary-item">
+                                <span>عدد القطع:</span>
+                                <span class="summary-total">${data.count}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>الوزن الإجمالي:</span>
+                                <span class="summary-total">${data.weight.toFixed(2)} جرام</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>إجمالي المصنعية:</span>
+                                <span class="summary-total">${data.manufacturing.toFixed(2)}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>الإجمالي:</span>
+                                <span class="summary-total">${data.total.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    `);
+                });
+
+                printWindow.document.write(`
+                                </div>
+                            </div>
+
+                            <h2>البيانات التفصيلية</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>الباركود</th>
+                                        <th>القطعة</th>
+                                        <th>الشركة</th>
+                                        <th>الصنف</th>
+                                        <th>الوزن</th>
+                                        <th>العيار</th>
+                                        <th>المصنعية</th>
+                                        <th>سعر الذهب</th>
+                                        <th>النوع</th>
+                                        <th>الإجمالي</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                 `);
 
                 filteredItems.forEach(item => {
@@ -2307,18 +2506,28 @@
                     `);
                 });
 
+                const totalAll = filteredItems.reduce((sum, item) => sum + item.totalPrice, 0);
                 printWindow.document.write(`
-                            </tbody>
-                        </table>
-                        
-                        <div class="footer">
-                            <p>تم إنشاء هذا التقرير بواسطة نظام جرد الذهب المتطور</p>
-                            <p>تاريخ التقرير: ${new Date().toLocaleDateString('ar-EG')}</p>
-                        </div>
-                        
-                        <div class="no-print" style="text-align: center; margin-top: 20px;">
-                            <button onclick="window.print()" style="padding: 10px 20px; background: #d4af37; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">طباعة</button>
-                            <button onclick="window.close()" style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">إغلاق</button>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="total-row">
+                                        <td colspan="9" class="text-left">الإجمالي الكلي:</td>
+                                        <td>${totalAll.toFixed(2)}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            
+                            <div class="footer">
+                                <p>تم إنشاء هذا التقرير بواسطة <span class="developer">نظام جرد الذهب المتطور</span></p>
+                                <p>تطوير: <span class="developer">محمد أحمد فؤاد</span> | 
+                                   <span class="whatsapp"><i class="fab fa-whatsapp"></i> +201010421571</span></p>
+                                <p>جميع الحقوق محفوظة © ${new Date().getFullYear()}</p>
+                            </div>
+                            
+                            <div class="no-print" style="text-align: center; margin-top: 20px;">
+                                <button onclick="window.print()" style="padding: 10px 20px; background: #d4af37; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">طباعة</button>
+                                <button onclick="window.close()" style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">إغلاق</button>
+                            </div>
                         </div>
                     </body>
                     </html>
@@ -2327,7 +2536,7 @@
                 printWindow.document.close();
             }
 
-            exportToExcel() {
+            exportToExcel(type = 'full') {
                 if (this.items.length === 0) {
                     this.showAlert('لا توجد بيانات للتصدير', 'error');
                     return;
@@ -2335,16 +2544,28 @@
 
                 const filteredItems = this.getFilteredItems();
 
-                // حساب المجاميع
-                const totalWeight = filteredItems.reduce((sum, item) => sum + item.weight, 0);
-                const totalManufacturing = filteredItems.reduce((sum, item) => sum + item.manufacturingPrice, 0);
-                const totalGold = filteredItems.reduce((sum, item) => sum + (item.weight * item.goldPrice), 0);
-                const totalAll = filteredItems.reduce((sum, item) => sum + item.totalPrice, 0);
+                if (type === 'summary') {
+                    this.exportSummaryToExcel(filteredItems);
+                } else {
+                    this.exportFullToExcel(filteredItems);
+                }
+            }
 
-                // تجهيز البيانات للتصدير
+            exportFullToExcel(items) {
+                // حساب المجاميع
+                const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+                const totalManufacturing = items.reduce((sum, item) => sum + item.manufacturingPrice, 0);
+                const totalGold = items.reduce((sum, item) => sum + (item.weight * item.goldPrice), 0);
+                const totalAll = items.reduce((sum, item) => sum + item.totalPrice, 0);
+
+                // تجهيز البيانات
                 const exportData = [
-                    ['تقرير جرد الذهب', '', '', '', '', '', '', '', '', ''],
+                    ['تقرير جرد الذهب الشامل', '', '', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '', '', ''],
+                    ['معلومات التقرير:', '', '', '', '', '', '', '', '', ''],
                     ['تاريخ التقرير:', new Date().toLocaleDateString('ar-EG'), '', '', '', '', '', '', '', ''],
+                    ['عدد القطع:', items.length, '', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '', '', ''],
                     ['الفلاتر المطبقة:', '', '', '', '', '', '', '', '', ''],
                     ['الشركة:', this.currentFilters.company !== 'all' ? this.getCompanyName(this.currentFilters.company) : 'الكل', 
                      'الصنف:', this.currentFilters.category !== 'all' ? this.getCategoryName(this.currentFilters.category) : 'الكل',
@@ -2353,7 +2574,7 @@
                     ['', '', '', '', '', '', '', '', '', ''],
                     ['البيانات التفصيلية:', '', '', '', '', '', '', '', '', ''],
                     ['الباركود', 'اسم القطعة', 'الشركة', 'الصنف', 'الوزن (جرام)', 'العيار', 'سعر المصنعية', 'سعر الذهب/جرام', 'النوع', 'الإجمالي'],
-                    ...filteredItems.map(item => [
+                    ...items.map(item => [
                         item.barcode,
                         item.name,
                         item.companyName || 'غير معروف',
@@ -2370,7 +2591,11 @@
                     ['الوزن الإجمالي:', totalWeight.toFixed(2) + ' جرام', '', '', '', '', '', '', '', ''],
                     ['إجمالي المصنعية:', totalManufacturing.toFixed(2), '', '', '', '', '', '', '', ''],
                     ['إجمالي الذهب:', totalGold.toFixed(2), '', '', '', '', '', '', '', ''],
-                    ['الإجمالي الكلي:', totalAll.toFixed(2), '', '', '', '', '', '', '', '']
+                    ['الإجمالي الكلي:', totalAll.toFixed(2), '', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '', '', ''],
+                    ['معلومات المطور:', '', '', '', '', '', '', '', '', ''],
+                    ['تم التطوير بواسطة:', 'محمد أحمد فؤاد', '', '', '', '', '', '', '', ''],
+                    ['للتواصل واتساب:', '+201010421571', '', '', '', '', '', '', '', '']
                 ];
 
                 // إنشاء ورقة عمل
@@ -2392,20 +2617,136 @@
                 ];
                 ws['!cols'] = wscols;
 
-                // دمج الخلايا للعناوين
+                // دمج الخلايا
                 ws['!merges'] = [
-                    { s: { r: 0, c: 0 }, e: { r: 0, c: 9 } }, // دمج عنوان التقرير
-                    { s: { r: 1, c: 0 }, e: { r: 1, c: 1 } }, // دمج تاريخ التقرير
-                    { s: { r: 2, c: 0 }, e: { r: 2, c: 9 } }, // دمج عنوان الفلاتر
-                    { s: { r: 5, c: 0 }, e: { r: 5, c: 9 } }, // دمج عنوان البيانات التفصيلية
-                    { s: { r: 11, c: 0 }, e: { r: 11, c: 9 } } // دمج عنوان الملخص
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: 9 } }, // عنوان التقرير
+                    { s: { r: 2, c: 0 }, e: { r: 2, c: 9 } }, // معلومات التقرير
+                    { s: { r: 6, c: 0 }, e: { r: 6, c: 9 } }, // الفلاتر
+                    { s: { r: 9, c: 0 }, e: { r: 9, c: 9 } }, // البيانات التفصيلية
+                    { s: { r: 13, c: 0 }, e: { r: 13, c: 9 } }, // ملخص الجرد
+                    { s: { r: 19, c: 0 }, e: { r: 19, c: 9 } } // معلومات المطور
                 ];
 
                 XLSX.utils.book_append_sheet(wb, ws, "جرد الذهب");
                 
-                // حفظ الملف
                 const date = new Date();
                 const fileName = `جرد_الذهب_${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                
+                this.showAlert('تم تصدير الملف بنجاح', 'success');
+            }
+
+            exportSummaryToExcel(items) {
+                // حساب المجاميع حسب الشركات
+                const companiesSummary = {};
+                const categoriesSummary = {};
+
+                items.forEach(item => {
+                    // ملخص الشركات
+                    if (!companiesSummary[item.companyName]) {
+                        companiesSummary[item.companyName] = {
+                            count: 0,
+                            weight: 0,
+                            manufacturing: 0,
+                            total: 0
+                        };
+                    }
+                    companiesSummary[item.companyName].count++;
+                    companiesSummary[item.companyName].weight += item.weight;
+                    companiesSummary[item.companyName].manufacturing += item.manufacturingPrice;
+                    companiesSummary[item.companyName].total += item.totalPrice;
+
+                    // ملخص الأصناف
+                    if (!categoriesSummary[item.categoryName]) {
+                        categoriesSummary[item.categoryName] = {
+                            count: 0,
+                            weight: 0,
+                            manufacturing: 0,
+                            total: 0
+                        };
+                    }
+                    categoriesSummary[item.categoryName].count++;
+                    categoriesSummary[item.categoryName].weight += item.weight;
+                    categoriesSummary[item.categoryName].manufacturing += item.manufacturingPrice;
+                    categoriesSummary[item.categoryName].total += item.totalPrice;
+                });
+
+                // تجهيز بيانات ملخص الشركات
+                const companiesData = [['ملخص حسب الشركة', '', '', '', '']];
+                companiesData.push(['الشركة', 'عدد القطع', 'الوزن (جرام)', 'إجمالي المصنعية', 'الإجمالي']);
+                
+                Object.entries(companiesSummary).forEach(([company, data]) => {
+                    companiesData.push([
+                        company,
+                        data.count,
+                        data.weight.toFixed(2),
+                        data.manufacturing.toFixed(2),
+                        data.total.toFixed(2)
+                    ]);
+                });
+
+                // تجهيز بيانات ملخص الأصناف
+                const categoriesData = [['ملخص حسب الصنف', '', '', '', '']];
+                categoriesData.push(['الصنف', 'عدد القطع', 'الوزن (جرام)', 'إجمالي المصنعية', 'الإجمالي']);
+                
+                Object.entries(categoriesSummary).forEach(([category, data]) => {
+                    categoriesData.push([
+                        category,
+                        data.count,
+                        data.weight.toFixed(2),
+                        data.manufacturing.toFixed(2),
+                        data.total.toFixed(2)
+                    ]);
+                });
+
+                // إنشاء ورقة عمل
+                const wb = XLSX.utils.book_new();
+                
+                // ورقة ملخص الشركات
+                const wsCompanies = XLSX.utils.aoa_to_sheet(companiesData);
+                const companiesCols = [
+                    { wch: 25 }, // الشركة
+                    { wch: 12 }, // عدد القطع
+                    { wch: 15 }, // الوزن
+                    { wch: 15 }, // المصنعية
+                    { wch: 15 }  // الإجمالي
+                ];
+                wsCompanies['!cols'] = companiesCols;
+                XLSX.utils.book_append_sheet(wb, wsCompanies, "ملخص الشركات");
+
+                // ورقة ملخص الأصناف
+                const wsCategories = XLSX.utils.aoa_to_sheet(categoriesData);
+                const categoriesCols = [
+                    { wch: 25 }, // الصنف
+                    { wch: 12 }, // عدد القطع
+                    { wch: 15 }, // الوزن
+                    { wch: 15 }, // المصنعية
+                    { wch: 15 }  // الإجمالي
+                ];
+                wsCategories['!cols'] = categoriesCols;
+                XLSX.utils.book_append_sheet(wb, wsCategories, "ملخص الأصناف");
+
+                // ورقة معلومات المطور
+                const developerData = [
+                    ['معلومات المطور', '', ''],
+                    ['', '', ''],
+                    ['الاسم', 'محمد أحمد فؤاد', ''],
+                    ['رقم الواتساب', '+201010421571', ''],
+                    ['', '', ''],
+                    ['للتواصل عبر واتساب:', 'https://wa.me/201010421571', '']
+                ];
+                const wsDeveloper = XLSX.utils.aoa_to_sheet(developerData);
+                const developerCols = [
+                    { wch: 20 },
+                    { wch: 30 },
+                    { wch: 20 }
+                ];
+                wsDeveloper['!cols'] = developerCols;
+                XLSX.utils.book_append_sheet(wb, wsDeveloper, "المطور");
+
+                // حفظ الملف
+                const date = new Date();
+                const fileName = `ملخص_جرد_الذهب_${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.xlsx`;
                 XLSX.writeFile(wb, fileName);
                 
                 this.showAlert('تم تصدير الملف بنجاح', 'success');
@@ -2496,6 +2837,13 @@
                         9: { cellWidth: 15 }
                     }
                 });
+
+                // إضافة توقيع المطور
+                const finalY = doc.lastAutoTable.finalY + 10;
+                doc.setFontSize(8);
+                doc.setTextColor(111, 66, 193);
+                doc.text('تطوير: محمد أحمد فؤاد', 20, finalY);
+                doc.text('واتساب: +201010421571', 20, finalY + 5);
 
                 // حفظ الملف
                 const date = new Date();
