@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام جرد محل الذهب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #d4af37;
+            --secondary-color: #8b7355;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* الشريط العلوي */
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: var(--light-color);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .stat-item span:first-child {
+            color: var(--secondary-color);
+            margin-left: 10px;
+        }
+
+        .stat-item span:last-child {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* قسم الماسح الضوئي */
+        .scanner-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .scanner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .scanner-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #scanner-video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid var(--primary-color);
+            box-sizing: border-box;
+        }
+
+        .scanner-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+
+        .manual-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .manual-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* النماذج */
+        .add-item-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .item-form {
+            margin-top: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group input[readonly] {
+            background: var(--light-color);
+            cursor: not-allowed;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        /* الأزرار */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-excel {
+            background: #1d6f42;
+            color: white;
+        }
+
+        .btn-pdf {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* أقسام الجرد */
+        .inventory-sections {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .section-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #666;
+            position: relative;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 35px 8px 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* الجداول */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        tfoot td {
+            background: var(--light-color);
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        /* أزرار الإجراءات */
+        .action-btn {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            font-size: 12px;
+        }
+
+        .edit-btn {
+            background: var(--warning-color);
+        }
+
+        .delete-btn {
+            background: var(--danger-color);
+        }
+
+        /* قسم التصدير */
+        .export-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* رسائل التنبيه */
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert-success {
+            background: var(--success-color);
+        }
+
+        .alert-error {
+            background: var(--danger-color);
+        }
+
+        .alert-warning {
+            background: var(--warning-color);
+            color: var(--dark-color);
+        }
+
+        @keyframes slideDown {
+            from {
+                top: -100px;
+                opacity: 0;
+            }
+            to {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+
+        /* التجاوب مع الشاشات */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stats {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+            }
+            
+            .form-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+            
+            .export-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .table-header {
+                flex-direction: column;
+            }
+            
+            .section-tabs {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط العلوي -->
+        <header class="header">
+            <h1><i class="fas fa-gem"></i> نظام جرد الذهب والمصنعية</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <span>إجمالي القطع:</span>
+                    <span id="totalItems">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>إجمالي الوزن:</span>
+                    <span id="totalWeight">0 جرام</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- الماسح الضوئي للباركود -->
+        <section class="scanner-section">
+            <div class="scanner-header">
+                <h2><i class="fas fa-camera"></i> ماسح الباركود</h2>
+                <button id="startScanner" class="btn btn-primary">
+                    <i class="fas fa-play"></i> تشغيل الماسح
+                </button>
+            </div>
+            <div id="scanner-container" class="scanner-container" style="display: none;">
+                <video id="scanner-video"></video>
+                <div class="scanner-overlay">
+                    <div class="scanner-line"></div>
+                </div>
+            </div>
+            <div class="manual-input">
+                <input type="text" id="barcodeInput" placeholder="أدخل الباركود يدوياً">
+                <button id="addBarcodeBtn" class="btn btn-success">
+                    <i class="fas fa-plus"></i> إضافة
+                </button>
+            </div>
+        </section>
+
+        <!-- نموذج إضافة قطعة جديدة -->
+        <section class="add-item-section">
+            <h2><i class="fas fa-plus-circle"></i> إضافة قطعة جديدة</h2>
+            <form id="itemForm" class="item-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="barcode">الباركود</label>
+                        <input type="text" id="barcode" required readonly placeholder="يتم التعبئة تلقائياً">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemName">اسم القطعة</label>
+                        <input type="text" id="itemName" required placeholder="أدخل اسم القطعة">
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">الوزن (جرام)</label>
+                        <input type="number" id="weight" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="goldType">نوع العيار</label>
+                        <select id="goldType" required>
+                            <option value="24">عيار 24</option>
+                            <option value="21" selected>عيار 21</option>
+                            <option value="18">عيار 18</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="manufacturingPrice">سعر المصنعية</label>
+                        <input type="number" id="manufacturingPrice" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="goldPrice">سعر الذهب (للجرام)</label>
+                        <input type="number" id="goldPrice" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalSellingPrice">سعر البيع الإجمالي</label>
+                        <input type="number" id="totalSellingPrice" step="0.01" readonly placeholder="0.00">
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> حفظ القطعة
+                    </button>
+                    <button type="button" class="btn btn-info" id="calculatePrice">
+                        <i class="fas fa-calculator"></i> حساب السعر
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- أقسام الجرد -->
+        <section class="inventory-sections">
+            <div class="section-tabs">
+                <button class="tab-btn active" data-tab="all">كل القطع</button>
+                <button class="tab-btn" data-tab="manufacturing">المصنعية فقط</button>
+                <button class="tab-btn" data-tab="gold">الذهب فقط</button>
+            </div>
+
+            <!-- جدول جميع القطع -->
+            <div id="all-items" class="tab-content active">
+                <div class="table-header">
+                    <h3><i class="fas fa-list"></i> جميع القطع</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchAll" placeholder="بحث في جميع القطع...">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="allItemsTable">
+                        <thead>
+                            <tr>
+                                <th>الباركود</th>
+                                <th>القطعة</th>
+                                <th>الوزن</th>
+                                <th>العيار</th>
+                                <th>المصنعية</th>
+                                <th>سعر الذهب</th>
+                                <th>الإجمالي</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allItemsBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-left">الإجمالي الكلي:</td>
+                                <td id="totalAllValue">0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- جدول المصنعية فقط -->
+            <div id="manufacturing-items" class="tab-content">
+                <div class="table-header">
+                    <h3><i class="fas fa-cog"></i> المصنعية فقط</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchManufacturing" placeholder="بحث في المصنعية...">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="manufacturingTable">
+                        <thead>
+                            <tr>
+                                <th>الباركود</th>
+                                <th>القطعة</th>
+                                <th>الوزن</th>
+                                <th>المصنعية</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="manufacturingBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-left">إجمالي المصنعية:</td>
+                                <td id="totalManufacturingValue">0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- جدول الذهب فقط -->
+            <div id="gold-items" class="tab-content">
+                <div class="table-header">
+                    <h3><i class="fas fa-coins"></i> الذهب فقط</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchGold" placeholder="بحث في الذهب...">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="goldTable">
+                        <thead>
+                            <tr>
+                                <th>الباركود</th>
+                                <th>القطعة</th>
+                                <th>الوزن</th>
+                                <th>العيار</th>
+                                <th>سعر الذهب</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="goldBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-left">إجمالي الذهب:</td>
+                                <td id="totalGoldValue">0</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- أزرار التصدير -->
+        <section class="export-section">
+            <h2><i class="fas fa-download"></i> تصدير التقارير</h2>
+            <div class="export-buttons">
+                <button id="exportExcel" class="btn btn-excel">
+                    <i class="fas fa-file-excel"></i> تصدير Excel
+                </button>
+                <button id="exportPDF" class="btn btn-pdf">
+                    <i class="fas fa-file-pdf"></i> تصدير PDF
+                </button>
+                <button id="clearAll" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> مسح الكل
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- مكان عرض رسائل التنبيه -->
+    <div id="alert-container"></div>
+
+    <!-- المكتبات الخارجية -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
+    <script>
+        // نظام إدارة المخزون المتكامل
+        class GoldInventory {
+            constructor() {
+                this.items = JSON.parse(localStorage.getItem('goldItems')) || [];
+                this.isScanning = false;
+                this.init();
+            }
+
+            init() {
+                this.renderAllTables();
+                this.updateStats();
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // تبديل التبويبات
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.switchTab(e));
+                });
+
+                // البحث
+                document.getElementById('searchAll')?.addEventListener('input', (e) => this.searchItems(e.target.value, 'all'));
+                document.getElementById('searchManufacturing')?.addEventListener('input', (e) => this.searchItems(e.target.value, 'manufacturing'));
+                document.getElementById('searchGold')?.addEventListener('input', (e) => this.searchItems(e.target.value, 'gold'));
+
+                // إضافة قطعة
+                document.getElementById('itemForm').addEventListener('submit', (e) => this.addItem(e));
+                
+                // حساب السعر
+                document.getElementById('calculatePrice').addEventListener('click', () => this.calculateTotalPrice());
+
+                // أزرار التصدير
+                document.getElementById('exportExcel').addEventListener('click', () => this.exportToExcel());
+                document.getElementById('exportPDF').addEventListener('click', () => this.exportToPDF());
+                document.getElementById('clearAll').addEventListener('click', () => this.clearAll());
+
+                // تحديث السعر الإجمالي عند تغيير المدخلات
+                ['weight', 'manufacturingPrice', 'goldPrice'].forEach(id => {
+                    document.getElementById(id).addEventListener('input', () => this.calculateTotalPrice());
+                });
+
+                // ماسح الباركود
+                document.getElementById('startScanner').addEventListener('click', () => this.toggleScanner());
+                document.getElementById('addBarcodeBtn').addEventListener('click', () => this.addManualBarcode());
+                document.getElementById('barcodeInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.addManualBarcode();
+                    }
+                });
+            }
+
+            showAlert(message, type = 'success') {
+                const alertContainer = document.getElementById('alert-container');
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.textContent = message;
+                alertContainer.innerHTML = '';
+                alertContainer.appendChild(alert);
+                
+                setTimeout(() => {
+                    alert.remove();
+                }, 3000);
+            }
+
+            switchTab(event) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                event.target.classList.add('active');
+                const tabId = event.target.dataset.tab;
+                document.getElementById(`${tabId}-items`).classList.add('active');
+            }
+
+            toggleScanner() {
+                const scannerContainer = document.getElementById('scanner-container');
+                const startBtn = document.getElementById('startScanner');
+
+                if (!this.isScanning) {
+                    scannerContainer.style.display = 'block';
+                    startBtn.innerHTML = '<i class="fas fa-stop"></i> إيقاف الماسح';
+                    this.startScanner();
+                } else {
+                    scannerContainer.style.display = 'none';
+                    startBtn.innerHTML = '<i class="fas fa-play"></i> تشغيل الماسح';
+                    this.stopScanner();
+                }
+                
+                this.isScanning = !this.isScanning;
+            }
+
+            startScanner() {
+                if (typeof Quagga === 'undefined') {
+                    this.showAlert('خطأ في تحميل مكتبة الماسح الضوئي', 'error');
+                    return;
+                }
+
+                Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: document.querySelector('#scanner-video'),
+                        constraints: {
+                            width: 640,
+                            height: 480,
+                            facingMode: "environment"
+                        },
+                    },
+                    decoder: {
+                        readers: ["ean_reader", "ean_8_reader", "code_128_reader", "code_39_reader"]
+                    }
+                }, (err) => {
+                    if (err) {
+                        console.error('خطأ في تهيئة الماسح:', err);
+                        this.showAlert('خطأ في تشغيل الكاميرا. تأكد من منح الصلاحيات', 'error');
+                        return;
+                    }
+                    Quagga.start();
+                });
+
+                Quagga.onDetected((data) => {
+                    const code = data.codeResult.code;
+                    this.handleScannedBarcode(code);
+                    this.stopScanner();
+                    this.toggleScanner();
+                });
+            }
+
+            stopScanner() {
+                if (typeof Quagga !== 'undefined') {
+                    Quagga.stop();
+                }
+            }
+
+            handleScannedBarcode(barcode) {
+                document.getElementById('barcode').value = barcode;
+                document.getElementById('barcodeInput').value = barcode;
+                
+                const existingItem = this.items.find(item => item.barcode === barcode);
+                if (existingItem) {
+                    document.getElementById('itemName').value = existingItem.name;
+                    document.getElementById('weight').value = existingItem.weight;
+                    document.getElementById('goldType').value = existingItem.goldType;
+                    document.getElementById('manufacturingPrice').value = existingItem.manufacturingPrice;
+                    document.getElementById('goldPrice').value = existingItem.goldPrice;
+                    this.calculateTotalPrice();
+                    
+                    this.showAlert('تم العثور على القطعة! يمكنك تحديث البيانات', 'warning');
+                } else {
+                    document.getElementById('itemName').focus();
+                    this.showAlert('قطعة جديدة - أدخل البيانات', 'success');
+                }
+            }
+
+            addManualBarcode() {
+                const barcode = document.getElementById('barcodeInput').value.trim();
+                if (barcode) {
+                    this.handleScannedBarcode(barcode);
+                    document.getElementById('barcodeInput').value = '';
+                } else {
+                    this.showAlert('الرجاء إدخال الباركود', 'error');
+                }
+            }
+
+            addItem(event) {
+                event.preventDefault();
+
+                const barcode = document.getElementById('barcode').value;
+                if (!barcode) {
+                    this.showAlert('الرجاء إدخال الباركود أولاً', 'error');
+                    return;
+                }
+
+                const newItem = {
+                    id: Date.now(),
+                    barcode: barcode,
+                    name: document.getElementById('itemName').value,
+                    weight: parseFloat(document.getElementById('weight').value) || 0,
+                    goldType: parseInt(document.getElementById('goldType').value),
+                    manufacturingPrice: parseFloat(document.getElementById('manufacturingPrice').value) || 0,
+                    goldPrice: parseFloat(document.getElementById('goldPrice').value) || 0,
+                    totalPrice: parseFloat(document.getElementById('totalSellingPrice').value) || 0
+                };
+
+                // التحقق من عدم تكرار الباركود
+                const existingItem = this.items.find(item => item.barcode === barcode);
+                if (existingItem) {
+                    // تحديث القطعة الموجودة
+                    const index = this.items.findIndex(item => item.barcode === barcode);
+                    this.items[index] = newItem;
+                    this.showAlert('تم تحديث القطعة بنجاح', 'success');
+                } else {
+                    // إضافة قطعة جديدة
+                    this.items.push(newItem);
+                    this.showAlert('تم إضافة القطعة بنجاح', 'success');
+                }
+
+                this.saveToLocalStorage();
+                this.renderAllTables();
+                this.updateStats();
+                this.resetForm();
+            }
+
+            calculateTotalPrice() {
+                const weight = parseFloat(document.getElementById('weight').value) || 0;
+                const manufacturingPrice = parseFloat(document.getElementById('manufacturingPrice').value) || 0;
+                const goldPrice = parseFloat(document.getElementById('goldPrice').value) || 0;
+
+                const goldTotal = weight * goldPrice;
+                const totalPrice = goldTotal + manufacturingPrice;
+
+                document.getElementById('totalSellingPrice').value = totalPrice.toFixed(2);
+            }
+
+            deleteItem(id) {
+                if (confirm('هل أنت متأكد من حذف هذه القطعة؟')) {
+                    this.items = this.items.filter(item => item.id !== id);
+                    this.saveToLocalStorage();
+                    this.renderAllTables();
+                    this.updateStats();
+                    this.showAlert('تم حذف القطعة بنجاح', 'warning');
+                }
+            }
+
+            editItem(id) {
+                const item = this.items.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('barcode').value = item.barcode;
+                    document.getElementById('itemName').value = item.name;
+                    document.getElementById('weight').value = item.weight;
+                    document.getElementById('goldType').value = item.goldType;
+                    document.getElementById('manufacturingPrice').value = item.manufacturingPrice;
+                    document.getElementById('goldPrice').value = item.goldPrice;
+                    this.calculateTotalPrice();
+
+                    this.deleteItem(id);
+                    this.showAlert('يمكنك تعديل البيانات الآن', 'info');
+                }
+            }
+
+            renderAllTables() {
+                this.renderAllItemsTable();
+                this.renderManufacturingTable();
+                this.renderGoldTable();
+            }
+
+            renderAllItemsTable() {
+                const tbody = document.getElementById('allItemsBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                let totalAll = 0;
+
+                this.items.forEach(item => {
+                    totalAll += item.totalPrice;
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.barcode}</td>
+                        <td>${item.name}</td>
+                        <td>${item.weight}g</td>
+                        <td>${item.goldType}</td>
+                        <td>${item.manufacturingPrice.toFixed(2)}</td>
+                        <td>${item.goldPrice.toFixed(2)}</td>
+                        <td>${item.totalPrice.toFixed(2)}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="inventory.editItem(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="inventory.deleteItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                });
+
+                document.getElementById('totalAllValue').textContent = totalAll.toFixed(2);
+            }
+
+            renderManufacturingTable() {
+                const tbody = document.getElementById('manufacturingBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                let totalManufacturing = 0;
+
+                this.items.forEach(item => {
+                    totalManufacturing += item.manufacturingPrice;
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.barcode}</td>
+                        <td>${item.name}</td>
+                        <td>${item.weight}g</td>
+                        <td>${item.manufacturingPrice.toFixed(2)}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="inventory.editItem(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="inventory.deleteItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                });
+
+                document.getElementById('totalManufacturingValue').textContent = totalManufacturing.toFixed(2);
+            }
+
+            renderGoldTable() {
+                const tbody = document.getElementById('goldBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                let totalGold = 0;
+
+                this.items.forEach(item => {
+                    totalGold += item.weight * item.goldPrice;
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.barcode}</td>
+                        <td>${item.name}</td>
+                        <td>${item.weight}g</td>
+                        <td>${item.goldType}</td>
+                        <td>${item.goldPrice.toFixed(2)}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="inventory.editItem(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="inventory.deleteItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                });
+
+                document.getElementById('totalGoldValue').textContent = totalGold.toFixed(2);
+            }
+
+            searchItems(query, tableType) {
+                query = query.toLowerCase();
+                let filteredItems = this.items;
+
+                if (query) {
+                    filteredItems = this.items.filter(item => 
+                        item.name.toLowerCase().includes(query) || 
+                        item.barcode.toLowerCase().includes(query)
+                    );
+                }
+
+                switch(tableType) {
+                    case 'all':
+                        this.renderFilteredAllItems(filteredItems);
+                        break;
+                    case 'manufacturing':
+                        this.renderFilteredManufacturing(filteredItems);
+                        break;
+                    case 'gold':
+                        this.renderFilteredGold(filteredItems);
+                        break;
+                }
+            }
+
+            renderFilteredAllItems(items) {
+                const tbody = document.getElementById('allItemsBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                let totalAll = 0;
+
+                items.forEach(item => {
+                    totalAll += item.totalPrice;
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.barcode}</td>
+                        <td>${item.name}</td>
+                        <td>${item.weight}g</td>
+                        <td>${item.goldType}</td>
+                        <td>${item.manufacturingPrice.toFixed(2)}</td>
+                        <td>${item.goldPrice.toFixed(2)}</td>
+                        <td>${item.totalPrice.toFixed(2)}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="inventory.editItem(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="inventory.deleteItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                });
+
+                document.getElementById('totalAllValue').textContent = totalAll.toFixed(2);
+            }
+
+            renderFilteredManufacturing(items) {
+                const tbody = document.getElementById('manufacturingBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                let totalManufacturing = 0;
+
+                items.forEach(item => {
+                    totalManufacturing += item.manufacturingPrice;
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.barcode}</td>
+                        <td>${item.name}</td>
+                        <td>${item.weight}g</td>
+                        <td>${item.manufacturingPrice.toFixed(2)}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="inventory.editItem(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="inventory.deleteItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                });
+
+                document.getElementById('totalManufacturingValue').textContent = totalManufacturing.toFixed(2);
+            }
+
+            renderFilteredGold(items) {
+                const tbody = document.getElementById('goldBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                let totalGold = 0;
+
+                items.forEach(item => {
+                    totalGold += item.weight * item.goldPrice;
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.barcode}</td>
+                        <td>${item.name}</td>
+                        <td>${item.weight}g</td>
+                        <td>${item.goldType}</td>
+                        <td>${item.goldPrice.toFixed(2)}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="inventory.editItem(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="inventory.deleteItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                });
+
+                document.getElementById('totalGoldValue').textContent = totalGold.toFixed(2);
+            }
+
+            updateStats() {
+                document.getElementById('totalItems').textContent = this.items.length;
+                
+                const totalWeight = this.items.reduce((sum, item) => sum + item.weight, 0);
+                document.getElementById('totalWeight').textContent = totalWeight.toFixed(2) + ' جرام';
+            }
+
+            resetForm() {
+                document.getElementById('itemForm').reset();
+                document.getElementById('barcode').value = '';
+                document.getElementById('totalSellingPrice').value = '';
+            }
+
+            saveToLocalStorage() {
+                localStorage.setItem('goldItems', JSON.stringify(this.items));
+            }
+
+            clearAll() {
+                if (confirm('هل أنت متأكد من مسح جميع البيانات؟')) {
+                    this.items = [];
+                    this.saveToLocalStorage();
+                    this.renderAllTables();
+                    this.updateStats();
+                    this.showAlert('تم مسح جميع البيانات', 'warning');
+                }
+            }
+
+            exportToExcel() {
+                if (this.items.length === 0) {
+                    this.showAlert('لا توجد بيانات للتصدير', 'error');
+                    return;
+                }
+
+                // تجهيز البيانات للتصدير
+                const exportData = this.items.map(item => ({
+                    'الباركود': item.barcode,
+                    'اسم القطعة': item.name,
+                    'الوزن (جرام)': item.weight,
+                    'العيار': item.goldType,
+                    'سعر المصنعية': item.manufacturingPrice,
+                    'سعر الذهب/جرام': item.goldPrice,
+                    'الإجمالي': item.totalPrice
+                }));
+
+                // إنشاء ورقة عمل
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.json_to_sheet(exportData);
+
+                // إضافة المجاميع
+                const totalManufacturing = this.items.reduce((sum, item) => sum + item.manufacturingPrice, 0);
+                const totalGold = this.items.reduce((sum, item) => sum + (item.weight * item.goldPrice), 0);
+                const totalAll = this.items.reduce((sum, item) => sum + item.totalPrice, 0);
+
+                // إضافة صف المجاميع
+                XLSX.utils.sheet_add_aoa(ws, [
+                    ['', '', '', '', '', 'إجمالي المصنعية:', totalManufacturing.toFixed(2)],
+                    ['', '', '', '', '', 'إجمالي الذهب:', totalGold.toFixed(2)],
+                    ['', '', '', '', '', 'الإجمالي الكلي:', totalAll.toFixed(2)]
+                ], { origin: -1 });
+
+                // تنسيق العرض
+                const wscols = [
+                    { wch: 15 }, // الباركود
+                    { wch: 20 }, // اسم القطعة
+                    { wch: 10 }, // الوزن
+                    { wch: 8 },  // العيار
+                    { wch: 12 }, // المصنعية
+                    { wch: 15 }, // سعر الذهب
+                    { wch: 15 }  // الإجمالي
+                ];
+                ws['!cols'] = wscols;
+
+                XLSX.utils.book_append_sheet(wb, ws, "جرد الذهب");
+                
+                // حفظ الملف
+                const date = new Date();
+                const fileName = `جرد_الذهب_${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                
+                this.showAlert('تم تصدير الملف بنجاح', 'success');
+            }
+
+            exportToPDF() {
+                if (this.items.length === 0) {
+                    this.showAlert('لا توجد بيانات للتصدير', 'error');
+                    return;
+                }
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // إضافة عنوان
+                doc.setFontSize(22);
+                doc.setTextColor(212, 175, 55);
+                doc.text('تقرير جرد محل الذهب', 105, 20, { align: 'center' });
+
+                // إضافة تاريخ
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                const date = new Date();
+                doc.text(`التاريخ: ${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`, 20, 30);
+
+                // تجهيز بيانات الجدول
+                const tableData = this.items.map(item => [
+                    item.barcode,
+                    item.name,
+                    `${item.weight}g`,
+                    item.goldType,
+                    item.manufacturingPrice.toFixed(2),
+                    item.goldPrice.toFixed(2),
+                    item.totalPrice.toFixed(2)
+                ]);
+
+                // إضافة الجدول
+                doc.autoTable({
+                    head: [['الباركود', 'القطعة', 'الوزن', 'العيار', 'المصنعية', 'سعر الذهب', 'الإجمالي']],
+                    body: tableData,
+                    startY: 40,
+                    theme: 'striped',
+                    headStyles: {
+                        fillColor: [212, 175, 55],
+                        textColor: [255, 255, 255],
+                        fontStyle: 'bold',
+                        halign: 'center'
+                    },
+                    styles: {
+                        halign: 'center',
+                        fontSize: 10
+                    },
+                    columnStyles: {
+                        0: { cellWidth: 30 },
+                        1: { cellWidth: 35 },
+                        2: { cellWidth: 20 },
+                        3: { cellWidth: 15 },
+                        4: { cellWidth: 25 },
+                        5: { cellWidth: 25 },
+                        6: { cellWidth: 25 }
+                    }
+                });
+
+                // إضافة المجاميع
+                const totalManufacturing = this.items.reduce((sum, item) => sum + item.manufacturingPrice, 0);
+                const totalGold = this.items.reduce((sum, item) => sum + (item.weight * item.goldPrice), 0);
+                const totalAll = this.items.reduce((sum, item) => sum + item.totalPrice, 0);
+
+                let finalY = doc.lastAutoTable.finalY + 10;
+                
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text(`إجمالي المصنعية: ${totalManufacturing.toFixed(2)}`, 150, finalY);
+                doc.text(`إجمالي الذهب: ${totalGold.toFixed(2)}`, 150, finalY + 7);
+                doc.text(`الإجمالي الكلي: ${totalAll.toFixed(2)}`, 150, finalY + 14);
+
+                // حفظ الملف
+                doc.save(`جرد_الذهب_${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.pdf`);
+                
+                this.showAlert('تم تصدير الملف بنجاح', 'success');
+            }
+        }
+
+        // تهيئة التطبيق
+        const inventory = new GoldInventory();
+
+        // جعل الكائن متاحاً عالمياً للأزرار
+        window.inventory = inventory;
+    </script>
+</body>
+</html>
